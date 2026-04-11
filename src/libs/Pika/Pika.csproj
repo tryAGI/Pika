@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Nuget">
+    <PackageId>TryAGI.Pika</PackageId>
     <Description>C# SDK for the Pika Labs PikaStream API -- real-time AI avatars for video meetings, voice cloning, and avatar generation.</Description>
     <PackageTags>pika;pikastream;avatar;realtime;meeting;ai;sdk;dotnet;openapi</PackageTags>
     <NoWarn>$(NoWarn);CS3002;CS3003;CS1591;CA1822</NoWarn>
