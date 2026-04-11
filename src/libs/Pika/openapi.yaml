@@ -1,0 +1,428 @@
+openapi: 3.0.3
+info:
+  title: Pika Labs PikaStream API
+  description: |
+    Real-time AI avatar API for video meetings, voice cloning, and avatar generation.
+    Reverse-engineered from the Pika-Skills Python client.
+  version: '1.0.0'
+  contact:
+    name: Pika Labs
+    url: https://pika.art
+
+servers:
+  - url: https://api.pika.art
+    description: Primary API endpoint
+  - url: https://srkibaanghvsriahb.pika.art/proxy/realtime
+    description: Proxy/realtime endpoint (used by Python SDK)
+
+security:
+  - bearer: []
+
+paths:
+  /developer/balance:
+    get:
+      operationId: getDeveloperBalance
+      summary: Get developer account balance
+      description: Returns the current credit balance and currency for the authenticated developer account.
+      tags:
+        - Developer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceResponse'
+
+  /developer/topup/products:
+    get:
+      operationId: getTopupProducts
+      summary: List available top-up products
+      description: Returns a list of credit top-up products available for purchase.
+      tags:
+        - Developer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopupProductsResponse'
+
+  /developer/topup:
+    post:
+      operationId: createTopup
+      summary: Create a top-up checkout session
+      description: Initiates a credit purchase by creating a checkout session for the specified product.
+      tags:
+        - Developer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopupRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopupResponse'
+
+  /meeting-session:
+    post:
+      operationId: createMeetingSession
+      summary: Create a meeting session with avatar
+      description: |
+        Joins a Google Meet or Zoom call with an AI-powered avatar.
+        Requires a reference image for the avatar appearance, a voice ID for speech synthesis,
+        and the meeting URL to join.
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateMeetingSessionRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingSessionResponse'
+
+  /session/{session_id}:
+    get:
+      operationId: getSession
+      summary: Get meeting session status
+      description: Returns the current status and connection details for a meeting session.
+      tags:
+        - Sessions
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique session identifier
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionStatusResponse'
+
+    delete:
+      operationId: deleteSession
+      summary: End a meeting session
+      description: Terminates an active meeting session, causing the avatar bot to leave the call.
+      tags:
+        - Sessions
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique session identifier
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteSessionResponse'
+
+  /voice/clone:
+    post:
+      operationId: cloneVoice
+      summary: Clone a voice from audio
+      description: |
+        Creates a cloned voice from an audio sample. The cloned voice can be used
+        for avatar speech synthesis in meeting sessions.
+      tags:
+        - Voice
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CloneVoiceRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloneVoiceResponse'
+
+  /avatar/generate:
+    post:
+      operationId: generateAvatar
+      summary: Generate an avatar image
+      description: |
+        Generates an AI avatar image from a text prompt using a specified model.
+        The generated image can be used as the avatar appearance in meeting sessions.
+      tags:
+        - Avatar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateAvatarRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateAvatarResponse'
+
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+
+  schemas:
+    BalanceResponse:
+      type: object
+      properties:
+        balance:
+          type: number
+          format: double
+          description: Current credit balance
+        currency:
+          type: string
+          description: Currency code (e.g., "USD")
+      required:
+        - balance
+        - currency
+
+    TopupProductsResponse:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/TopupProduct'
+      required:
+        - products
+
+    TopupProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Product identifier
+        name:
+          type: string
+          description: Product display name
+        credits:
+          type: number
+          format: double
+          description: Number of credits included
+        price_cents:
+          type: integer
+          description: Price in cents
+      required:
+        - id
+        - name
+        - credits
+        - price_cents
+
+    TopupRequest:
+      type: object
+      properties:
+        product_id:
+          type: string
+          description: The ID of the top-up product to purchase
+      required:
+        - product_id
+
+    TopupResponse:
+      type: object
+      properties:
+        checkout_url:
+          type: string
+          description: URL to complete the checkout
+        session_id:
+          type: string
+          description: Checkout session identifier
+      required:
+        - checkout_url
+        - session_id
+
+    MeetingPlatform:
+      type: string
+      enum:
+        - google_meet
+        - zoom
+      description: The video meeting platform
+
+    CreateMeetingSessionRequest:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+          description: Avatar reference image (binary upload)
+        voice_id:
+          type: string
+          description: Voice ID for avatar speech synthesis
+        meet_url:
+          type: string
+          description: Meeting URL to join
+        bot_name:
+          type: string
+          description: Display name for the avatar bot in the meeting
+        platform:
+          $ref: '#/components/schemas/MeetingPlatform'
+        meeting_password:
+          type: string
+          description: Optional meeting password
+        system_prompt:
+          type: string
+          description: Optional system prompt to guide avatar behavior
+      required:
+        - image
+        - voice_id
+        - meet_url
+        - bot_name
+        - platform
+
+    MeetingSessionResponse:
+      type: object
+      properties:
+        session_id:
+          type: string
+          description: Unique session identifier
+        platform:
+          $ref: '#/components/schemas/MeetingPlatform'
+        status:
+          type: string
+          description: Initial session status
+      required:
+        - session_id
+        - platform
+        - status
+
+    SessionStatus:
+      type: string
+      enum:
+        - created
+        - pending
+        - ready
+        - error
+        - closed
+      description: Session lifecycle status
+
+    SessionStatusResponse:
+      type: object
+      properties:
+        session_id:
+          type: string
+          description: Unique session identifier
+        status:
+          $ref: '#/components/schemas/SessionStatus'
+        video_worker_connected:
+          type: boolean
+          description: Whether the video processing worker is connected
+        video_connected:
+          type: boolean
+          description: Whether the video stream is connected
+        meeting_bot_connected:
+          type: boolean
+          description: Whether the bot has joined the meeting
+        error_message:
+          type: string
+          description: Error details if status is error
+      required:
+        - session_id
+        - status
+        - video_worker_connected
+        - video_connected
+        - meeting_bot_connected
+
+    DeleteSessionResponse:
+      type: object
+      properties:
+        session_id:
+          type: string
+          description: Unique session identifier
+        status:
+          type: string
+          description: Final status (closed)
+      required:
+        - session_id
+        - status
+
+    CloneVoiceRequest:
+      type: object
+      properties:
+        audio:
+          type: string
+          format: binary
+          description: Audio sample for voice cloning (binary upload)
+        name:
+          type: string
+          description: Name for the cloned voice
+        noise_reduction:
+          type: boolean
+          description: Whether to apply noise reduction to the audio sample
+          default: false
+      required:
+        - audio
+        - name
+
+    CloneVoiceResponse:
+      type: object
+      properties:
+        voice_id:
+          type: string
+          description: Unique identifier for the cloned voice
+        provider:
+          type: string
+          description: Voice provider service name
+        cloned_at:
+          type: string
+          format: date-time
+          description: Timestamp when the voice was cloned
+        source_audio:
+          type: string
+          description: Reference to the source audio file
+        retention_warning:
+          type: string
+          description: Data retention policy notice
+      required:
+        - voice_id
+        - provider
+        - cloned_at
+
+    GenerateAvatarRequest:
+      type: object
+      properties:
+        prompt:
+          type: string
+          description: Text description for avatar generation
+        model:
+          type: string
+          description: Model to use for generation
+          default: gpt-image-1-mini
+
+    GenerateAvatarResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          description: URL of the generated avatar image
+        revised_prompt:
+          type: string
+          description: The prompt as revised by the model
+      required:
+        - url
