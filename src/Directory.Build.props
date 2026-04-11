@@ -13,6 +13,7 @@
     <NuGetAuditMode>all</NuGetAuditMode>
     <NuGetAuditLevel>low</NuGetAuditLevel>
     <WarningsAsErrors>$(WarningsAsErrors);NU1900;NU1901;NU1902;NU1903;NU1904</WarningsAsErrors>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);CA1303</WarningsNotAsErrors>
   </PropertyGroup>
 
 </Project>
