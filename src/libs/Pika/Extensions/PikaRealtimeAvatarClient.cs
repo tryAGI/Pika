@@ -116,6 +116,23 @@ public sealed class PikaRealtimeAvatarClient : IRealtimeAvatarClient
         yield break;
     }
 
+    /// <summary>
+    /// Gets the current status of the meeting session.
+    /// Polls the Pika API for session state (created, pending, ready, error, closed)
+    /// along with connection details (video worker, video stream, meeting bot).
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The current session status and connection details.</returns>
+    public async Task<SessionStatusResponse> GetSessionStatusAsync(
+        CancellationToken cancellationToken = default)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+
+        return await _client.Sessions.GetSessionAsync(
+            sessionId: _sessionId,
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+    }
+
     /// <inheritdoc />
     [SuppressMessage("Design", "CA1031:Do not catch general exception types",
         Justification = "Best effort cleanup -- session may already be closed")]
