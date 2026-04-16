@@ -133,6 +133,48 @@ public sealed class PikaRealtimeAvatarClient : IRealtimeAvatarClient
             cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Polls the session status until it reaches "ready" or "error", or the timeout expires.
+    /// </summary>
+    /// <param name="timeout">Maximum time to wait. Defaults to 90 seconds.</param>
+    /// <param name="pollInterval">Time between polls. Defaults to 2 seconds.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The final session status response.</returns>
+    /// <exception cref="TimeoutException">Thrown if the session does not become ready within the timeout.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if the session enters an error state.</exception>
+    public async Task<SessionStatusResponse> WaitUntilReadyAsync(
+        TimeSpan? timeout = null,
+        TimeSpan? pollInterval = null,
+        CancellationToken cancellationToken = default)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+
+        var effectiveTimeout = timeout ?? TimeSpan.FromSeconds(90);
+        var effectivePollInterval = pollInterval ?? TimeSpan.FromSeconds(2);
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        cts.CancelAfter(effectiveTimeout);
+
+        while (!cts.Token.IsCancellationRequested)
+        {
+            var status = await GetSessionStatusAsync(cts.Token).ConfigureAwait(false);
+
+            if (status.Status == SessionStatus.Ready)
+                return status;
+
+            if (status.Status == SessionStatus.Error)
+                throw new InvalidOperationException(
+                    $"Pika meeting session entered error state: {status.ErrorMessage}");
+
+            if (status.Status == SessionStatus.Closed)
+                throw new InvalidOperationException("Pika meeting session was closed unexpectedly.");
+
+            await Task.Delay(effectivePollInterval, cts.Token).ConfigureAwait(false);
+        }
+
+        throw new TimeoutException(
+            $"Pika meeting session did not become ready within {effectiveTimeout.TotalSeconds}s.");
+    }
+
     /// <inheritdoc />
     [SuppressMessage("Design", "CA1031:Do not catch general exception types",
         Justification = "Best effort cleanup -- session may already be closed")]
