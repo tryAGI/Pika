@@ -6,6 +6,19 @@ namespace Pika
     public partial class VoiceClient
     {
 
+        private static readonly global::Pika.AutoSDKServer[] s_CloneVoiceServers = new global::Pika.AutoSDKServer[]
+        {            new global::Pika.AutoSDKServer(
+                id: "https-api-pika-art",
+                name: "Primary API endpoint",
+                url: "https://api.pika.art/",
+                description: "Primary API endpoint"),
+            new global::Pika.AutoSDKServer(
+                id: "https-srkibaanghvsriahb-pika-art-proxy-realtime",
+                name: "Proxy/realtime endpoint (used by Python SDK)",
+                url: "https://srkibaanghvsriahb.pika.art/proxy/realtime",
+                description: "Proxy/realtime endpoint (used by Python SDK)"),
+        };
+
 
         private static readonly global::Pika.EndPointSecurityRequirement s_CloneVoiceSecurityRequirement0 =
             new global::Pika.EndPointSecurityRequirement
@@ -88,7 +101,9 @@ namespace Pika
             {
                             var __pathBuilder = new global::Pika.PathBuilder(
                                 path: "/voice/clone",
-                                baseUri: HttpClient.BaseAddress);
+                                baseUri: ResolveBaseUri(
+                                servers: s_CloneVoiceServers,
+                                defaultBaseUrl: "https://api.pika.art/"));
                             var __path = __pathBuilder.ToString();
                 __path = global::Pika.AutoSDKRequestOptionsSupport.AppendQueryParameters(
                     path: __path,
@@ -120,6 +135,34 @@ namespace Pika
             }
                             var __httpRequestContent = new global::System.Net.Http.MultipartFormDataContent();
                             var __contentAudio = new global::System.Net.Http.ByteArrayContent(request.Audio ?? global::System.Array.Empty<byte>());
+                            __contentAudio.Headers.ContentType = new global::System.Net.Http.Headers.MediaTypeHeaderValue(
+                                request.Audioname is null
+                                    ? "application/octet-stream"
+                                    : (global::System.IO.Path.GetExtension(request.Audioname) ?? string.Empty).ToLowerInvariant() switch
+                                    {
+                                        ".aac" => "audio/aac",
+                                        ".flac" => "audio/flac",
+                                        ".gif" => "image/gif",
+                                        ".jpeg" => "image/jpeg",
+                                        ".jpg" => "image/jpeg",
+                                        ".json" => "application/json",
+                                        ".m4a" => "audio/mp4",
+                                        ".mp3" => "audio/mpeg",
+                                        ".mp4" => "video/mp4",
+                                        ".mpeg" => "audio/mpeg",
+                                        ".mpga" => "audio/mpeg",
+                                        ".oga" => "audio/ogg",
+                                        ".ogg" => "audio/ogg",
+                                        ".opus" => "audio/ogg",
+                                        ".pdf" => "application/pdf",
+                                        ".png" => "image/png",
+                                        ".txt" => "text/plain",
+                                        ".wav" => "audio/wav",
+                                        ".weba" => "audio/webm",
+                                        ".webm" => "video/webm",
+                                        ".webp" => "image/webp",
+                                        _ => "application/octet-stream",
+                                    });
                             __httpRequestContent.Add(
                                 content: __contentAudio,
                                 name: "\"audio\"",
@@ -129,13 +172,13 @@ namespace Pika
                                 __contentAudio.Headers.ContentDisposition.FileNameStar = null;
                             }
                             __httpRequestContent.Add(
-                                content: new global::System.Net.Http.StringContent($"{request.Name}"),
+                                content: new global::System.Net.Http.StringContent(request.Name ?? string.Empty),
                                 name: "\"name\"");
                             if (request.NoiseReduction != default)
                             {
 
                                 __httpRequestContent.Add(
-                                    content: new global::System.Net.Http.StringContent($"{request.NoiseReduction}"),
+                                    content: new global::System.Net.Http.StringContent((global::System.Convert.ToString(request.NoiseReduction, global::System.Globalization.CultureInfo.InvariantCulture) ?? string.Empty).ToLowerInvariant()),
                                     name: "\"noise_reduction\"");
                             }
                             __httpRequest.Content = __httpRequestContent;

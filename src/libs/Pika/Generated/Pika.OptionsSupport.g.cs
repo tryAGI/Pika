@@ -106,6 +106,7 @@ namespace Pika
         public global::System.TimeSpan? Delay { get; set; }
     }
 
+
     /// <summary>
     /// Runtime hook interface for generated SDK lifecycle events.
     /// </summary>
@@ -235,6 +236,7 @@ namespace Pika
         /// </summary>
         public global::System.Threading.CancellationToken CancellationToken { get; set; }
     }
+
 
     internal static class AutoSDKRequestOptionsSupport
     {
@@ -379,7 +381,7 @@ namespace Pika
             }
 
             var builder = new global::System.Text.StringBuilder(path ?? string.Empty);
-            var hasQuery = builder.ToString().Contains("?", global::System.StringComparison.Ordinal);
+            var hasQuery = builder.ToString().IndexOf("?", global::System.StringComparison.Ordinal) >= 0;
             AppendParameters(builder, clientParameters, ref hasQuery);
             AppendParameters(builder, requestParameters, ref hasQuery);
             return builder.ToString();
