@@ -6,6 +6,19 @@ namespace Pika
     public partial class SessionsClient
     {
 
+        private static readonly global::Pika.AutoSDKServer[] s_GetSessionServers = new global::Pika.AutoSDKServer[]
+        {            new global::Pika.AutoSDKServer(
+                id: "https-api-pika-art",
+                name: "Primary API endpoint",
+                url: "https://api.pika.art/",
+                description: "Primary API endpoint"),
+            new global::Pika.AutoSDKServer(
+                id: "https-srkibaanghvsriahb-pika-art-proxy-realtime",
+                name: "Proxy/realtime endpoint (used by Python SDK)",
+                url: "https://srkibaanghvsriahb.pika.art/proxy/realtime",
+                description: "Proxy/realtime endpoint (used by Python SDK)"),
+        };
+
 
         private static readonly global::Pika.EndPointSecurityRequirement s_GetSessionSecurityRequirement0 =
             new global::Pika.EndPointSecurityRequirement
@@ -84,7 +97,9 @@ namespace Pika
             {
                             var __pathBuilder = new global::Pika.PathBuilder(
                                 path: $"/session/{sessionId}",
-                                baseUri: HttpClient.BaseAddress);
+                                baseUri: ResolveBaseUri(
+                                servers: s_GetSessionServers,
+                                defaultBaseUrl: "https://api.pika.art/"));
                             var __path = __pathBuilder.ToString();
                 __path = global::Pika.AutoSDKRequestOptionsSupport.AppendQueryParameters(
                     path: __path,
@@ -125,7 +140,7 @@ namespace Pika
                 PrepareGetSessionRequest(
                     httpClient: HttpClient,
                     httpRequestMessage: __httpRequest,
-                    sessionId: sessionId);
+                    sessionId: sessionId!);
 
                 return __httpRequest;
             }

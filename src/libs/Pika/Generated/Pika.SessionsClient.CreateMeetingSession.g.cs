@@ -6,6 +6,19 @@ namespace Pika
     public partial class SessionsClient
     {
 
+        private static readonly global::Pika.AutoSDKServer[] s_CreateMeetingSessionServers = new global::Pika.AutoSDKServer[]
+        {            new global::Pika.AutoSDKServer(
+                id: "https-api-pika-art",
+                name: "Primary API endpoint",
+                url: "https://api.pika.art/",
+                description: "Primary API endpoint"),
+            new global::Pika.AutoSDKServer(
+                id: "https-srkibaanghvsriahb-pika-art-proxy-realtime",
+                name: "Proxy/realtime endpoint (used by Python SDK)",
+                url: "https://srkibaanghvsriahb.pika.art/proxy/realtime",
+                description: "Proxy/realtime endpoint (used by Python SDK)"),
+        };
+
 
         private static readonly global::Pika.EndPointSecurityRequirement s_CreateMeetingSessionSecurityRequirement0 =
             new global::Pika.EndPointSecurityRequirement
@@ -89,7 +102,9 @@ namespace Pika
             {
                             var __pathBuilder = new global::Pika.PathBuilder(
                                 path: "/meeting-session",
-                                baseUri: HttpClient.BaseAddress);
+                                baseUri: ResolveBaseUri(
+                                servers: s_CreateMeetingSessionServers,
+                                defaultBaseUrl: "https://api.pika.art/"));
                             var __path = __pathBuilder.ToString();
                 __path = global::Pika.AutoSDKRequestOptionsSupport.AppendQueryParameters(
                     path: __path,
@@ -121,6 +136,34 @@ namespace Pika
             }
                             var __httpRequestContent = new global::System.Net.Http.MultipartFormDataContent();
                             var __contentImage = new global::System.Net.Http.ByteArrayContent(request.Image ?? global::System.Array.Empty<byte>());
+                            __contentImage.Headers.ContentType = new global::System.Net.Http.Headers.MediaTypeHeaderValue(
+                                request.Imagename is null
+                                    ? "application/octet-stream"
+                                    : (global::System.IO.Path.GetExtension(request.Imagename) ?? string.Empty).ToLowerInvariant() switch
+                                    {
+                                        ".aac" => "audio/aac",
+                                        ".flac" => "audio/flac",
+                                        ".gif" => "image/gif",
+                                        ".jpeg" => "image/jpeg",
+                                        ".jpg" => "image/jpeg",
+                                        ".json" => "application/json",
+                                        ".m4a" => "audio/mp4",
+                                        ".mp3" => "audio/mpeg",
+                                        ".mp4" => "video/mp4",
+                                        ".mpeg" => "audio/mpeg",
+                                        ".mpga" => "audio/mpeg",
+                                        ".oga" => "audio/ogg",
+                                        ".ogg" => "audio/ogg",
+                                        ".opus" => "audio/ogg",
+                                        ".pdf" => "application/pdf",
+                                        ".png" => "image/png",
+                                        ".txt" => "text/plain",
+                                        ".wav" => "audio/wav",
+                                        ".weba" => "audio/webm",
+                                        ".webm" => "video/webm",
+                                        ".webp" => "image/webp",
+                                        _ => "application/octet-stream",
+                                    });
                             __httpRequestContent.Add(
                                 content: __contentImage,
                                 name: "\"image\"",
@@ -130,29 +173,29 @@ namespace Pika
                                 __contentImage.Headers.ContentDisposition.FileNameStar = null;
                             }
                             __httpRequestContent.Add(
-                                content: new global::System.Net.Http.StringContent($"{request.VoiceId}"),
+                                content: new global::System.Net.Http.StringContent(request.VoiceId ?? string.Empty),
                                 name: "\"voice_id\"");
                             __httpRequestContent.Add(
-                                content: new global::System.Net.Http.StringContent($"{request.MeetUrl}"),
+                                content: new global::System.Net.Http.StringContent(request.MeetUrl ?? string.Empty),
                                 name: "\"meet_url\"");
                             __httpRequestContent.Add(
-                                content: new global::System.Net.Http.StringContent($"{request.BotName}"),
+                                content: new global::System.Net.Http.StringContent(request.BotName ?? string.Empty),
                                 name: "\"bot_name\"");
                             __httpRequestContent.Add(
-                                content: new global::System.Net.Http.StringContent($"{request.Platform.ToValueString()}"),
+                                content: new global::System.Net.Http.StringContent(request.Platform.ToValueString()),
                                 name: "\"platform\"");
                             if (request.MeetingPassword != default)
                             {
 
                                 __httpRequestContent.Add(
-                                    content: new global::System.Net.Http.StringContent($"{request.MeetingPassword}"),
+                                    content: new global::System.Net.Http.StringContent(request.MeetingPassword ?? string.Empty),
                                     name: "\"meeting_password\"");
                             } 
                             if (request.SystemPrompt != default)
                             {
 
                                 __httpRequestContent.Add(
-                                    content: new global::System.Net.Http.StringContent($"{request.SystemPrompt}"),
+                                    content: new global::System.Net.Http.StringContent(request.SystemPrompt ?? string.Empty),
                                     name: "\"system_prompt\"");
                             }
                             __httpRequest.Content = __httpRequestContent;
