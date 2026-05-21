@@ -125,5 +125,6 @@ namespace Pika
         public CreateMeetingSessionRequest()
         {
         }
+
     }
 }

@@ -42,5 +42,6 @@ namespace Pika
         public TopupRequest()
         {
         }
+
     }
 }
