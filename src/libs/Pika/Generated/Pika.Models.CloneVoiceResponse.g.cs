@@ -88,5 +88,6 @@ namespace Pika
         public CloneVoiceResponse()
         {
         }
+
     }
 }

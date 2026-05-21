@@ -53,5 +53,6 @@ namespace Pika
         public GenerateAvatarResponse()
         {
         }
+
     }
 }

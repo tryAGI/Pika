@@ -6,6 +6,19 @@ namespace Pika
     public partial class DeveloperClient
     {
 
+        private static readonly global::Pika.AutoSDKServer[] s_GetTopupProductsServers = new global::Pika.AutoSDKServer[]
+        {            new global::Pika.AutoSDKServer(
+                id: "https-api-pika-art",
+                name: "Primary API endpoint",
+                url: "https://api.pika.art/",
+                description: "Primary API endpoint"),
+            new global::Pika.AutoSDKServer(
+                id: "https-srkibaanghvsriahb-pika-art-proxy-realtime",
+                name: "Proxy/realtime endpoint (used by Python SDK)",
+                url: "https://srkibaanghvsriahb.pika.art/proxy/realtime",
+                description: "Proxy/realtime endpoint (used by Python SDK)"),
+        };
+
 
         private static readonly global::Pika.EndPointSecurityRequirement s_GetTopupProductsSecurityRequirement0 =
             new global::Pika.EndPointSecurityRequirement
@@ -50,6 +63,24 @@ namespace Pika
             global::Pika.AutoSDKRequestOptions? requestOptions = default,
             global::System.Threading.CancellationToken cancellationToken = default)
         {
+            var __response = await GetTopupProductsAsResponseAsync(
+                requestOptions: requestOptions,
+                cancellationToken: cancellationToken
+            ).ConfigureAwait(false);
+
+            return __response.Body;
+        }
+        /// <summary>
+        /// List available top-up products<br/>
+        /// Returns a list of credit top-up products available for purchase.
+        /// </summary>
+        /// <param name="requestOptions">Per-request overrides such as headers, query parameters, timeout, retries, and response buffering.</param>
+        /// <param name="cancellationToken">The token to cancel the operation with</param>
+        /// <exception cref="global::Pika.ApiException"></exception>
+        public async global::System.Threading.Tasks.Task<global::Pika.AutoSDKHttpResponse<global::Pika.TopupProductsResponse>> GetTopupProductsAsResponseAsync(
+            global::Pika.AutoSDKRequestOptions? requestOptions = default,
+            global::System.Threading.CancellationToken cancellationToken = default)
+        {
             PrepareArguments(
                 client: HttpClient);
             PrepareGetTopupProductsArguments(
@@ -77,9 +108,12 @@ namespace Pika
 
             global::System.Net.Http.HttpRequestMessage __CreateHttpRequest()
             {
+
                             var __pathBuilder = new global::Pika.PathBuilder(
                                 path: "/developer/topup/products",
-                                baseUri: HttpClient.BaseAddress);
+                                baseUri: ResolveBaseUri(
+                                servers: s_GetTopupProductsServers,
+                                defaultBaseUrl: "https://api.pika.art/"));
                             var __path = __pathBuilder.ToString();
                 __path = global::Pika.AutoSDKRequestOptionsSupport.AppendQueryParameters(
                     path: __path,
@@ -149,6 +183,8 @@ namespace Pika
                                 attempt: __attempt,
                                 maxAttempts: __maxAttempts,
                                 willRetry: false,
+                                retryDelay: null,
+                                retryReason: global::System.String.Empty,
                                 cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
                     try
                     {
@@ -159,6 +195,11 @@ namespace Pika
                     }
                     catch (global::System.Net.Http.HttpRequestException __exception)
                     {
+                        var __retryDelay = global::Pika.AutoSDKRequestOptionsSupport.GetRetryDelay(
+                            clientOptions: Options,
+                            requestOptions: requestOptions,
+                            response: null,
+                            attempt: __attempt);
                         var __willRetry = __attempt < __maxAttempts && !__effectiveCancellationToken.IsCancellationRequested;
                         await global::Pika.AutoSDKRequestOptionsSupport.OnAfterErrorAsync(
                             clientOptions: Options,
@@ -176,6 +217,8 @@ namespace Pika
                                 attempt: __attempt,
                                 maxAttempts: __maxAttempts,
                                 willRetry: __willRetry,
+                                retryDelay: __willRetry ? __retryDelay : (global::System.TimeSpan?)null,
+                                retryReason: "exception",
                                 cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
                         if (!__willRetry)
                         {
@@ -185,8 +228,7 @@ namespace Pika
                         __httpRequest.Dispose();
                         __httpRequest = null;
                         await global::Pika.AutoSDKRequestOptionsSupport.DelayBeforeRetryAsync(
-                            clientOptions: Options,
-                            requestOptions: requestOptions,
+                            retryDelay: __retryDelay,
                             cancellationToken: __effectiveCancellationToken).ConfigureAwait(false);
                         continue;
                     }
@@ -195,6 +237,11 @@ namespace Pika
                         __attempt < __maxAttempts &&
                         global::Pika.AutoSDKRequestOptionsSupport.ShouldRetryStatusCode(__response.StatusCode))
                     {
+                        var __retryDelay = global::Pika.AutoSDKRequestOptionsSupport.GetRetryDelay(
+                            clientOptions: Options,
+                            requestOptions: requestOptions,
+                            response: __response,
+                            attempt: __attempt);
                         await global::Pika.AutoSDKRequestOptionsSupport.OnAfterErrorAsync(
                             clientOptions: Options,
                             context: global::Pika.AutoSDKRequestOptionsSupport.CreateHookContext(
@@ -211,14 +258,15 @@ namespace Pika
                                 attempt: __attempt,
                                 maxAttempts: __maxAttempts,
                                 willRetry: true,
+                                retryDelay: __retryDelay,
+                                retryReason: "status:" + ((int)__response.StatusCode).ToString(global::System.Globalization.CultureInfo.InvariantCulture),
                                 cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
                         __response.Dispose();
                         __response = null;
                         __httpRequest.Dispose();
                         __httpRequest = null;
                         await global::Pika.AutoSDKRequestOptionsSupport.DelayBeforeRetryAsync(
-                            clientOptions: Options,
-                            requestOptions: requestOptions,
+                            retryDelay: __retryDelay,
                             cancellationToken: __effectiveCancellationToken).ConfigureAwait(false);
                         continue;
                     }
@@ -258,6 +306,8 @@ namespace Pika
                                 attempt: __attemptNumber,
                                 maxAttempts: __maxAttempts,
                                 willRetry: false,
+                                retryDelay: null,
+                                retryReason: global::System.String.Empty,
                                 cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
                 }
                 else
@@ -278,6 +328,8 @@ namespace Pika
                                 attempt: __attemptNumber,
                                 maxAttempts: __maxAttempts,
                                 willRetry: false,
+                                retryDelay: null,
+                                retryReason: global::System.String.Empty,
                                 cancellationToken: __effectiveCancellationToken)).ConfigureAwait(false);
                 }
 
@@ -302,9 +354,13 @@ namespace Pika
                                 {
                                     __response.EnsureSuccessStatusCode();
 
-                                    return
-                                        global::Pika.TopupProductsResponse.FromJson(__content, JsonSerializerContext) ??
+                                    var __value = global::Pika.TopupProductsResponse.FromJson(__content, JsonSerializerContext) ??
                                         throw new global::System.InvalidOperationException($"Response deserialization failed for \"{__content}\" ");
+                                    return new global::Pika.AutoSDKHttpResponse<global::Pika.TopupProductsResponse>(
+                                        statusCode: __response.StatusCode,
+                                        headers: global::Pika.AutoSDKHttpResponse.CreateHeaders(__response),
+                                        requestUri: __response.RequestMessage?.RequestUri,
+                                        body: __value);
                                 }
                                 catch (global::System.Exception __ex)
                                 {
@@ -332,9 +388,13 @@ namespace Pika
                 #endif
                                     ).ConfigureAwait(false);
 
-                                    return
-                                        await global::Pika.TopupProductsResponse.FromJsonStreamAsync(__content, JsonSerializerContext).ConfigureAwait(false) ??
+                                    var __value = await global::Pika.TopupProductsResponse.FromJsonStreamAsync(__content, JsonSerializerContext).ConfigureAwait(false) ??
                                         throw new global::System.InvalidOperationException("Response deserialization failed.");
+                                    return new global::Pika.AutoSDKHttpResponse<global::Pika.TopupProductsResponse>(
+                                        statusCode: __response.StatusCode,
+                                        headers: global::Pika.AutoSDKHttpResponse.CreateHeaders(__response),
+                                        requestUri: __response.RequestMessage?.RequestUri,
+                                        body: __value);
                                 }
                                 catch (global::System.Exception __ex)
                                 {

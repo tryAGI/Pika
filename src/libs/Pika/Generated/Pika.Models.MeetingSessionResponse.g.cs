@@ -67,5 +67,6 @@ namespace Pika
         public MeetingSessionResponse()
         {
         }
+
     }
 }

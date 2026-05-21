@@ -102,5 +102,6 @@ namespace Pika
         public SessionStatusResponse()
         {
         }
+
     }
 }
