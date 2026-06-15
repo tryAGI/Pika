@@ -8,6 +8,13 @@ C# SDK for the [Pika Labs](https://pika.art) PikaStream API -- real-time AI avat
 dotnet add package TryAGI.Pika
 ```
 
+### CLI
+
+```bash
+dotnet tool install --global Pika.CLI --prerelease
+pika api --help
+```
+
 ## Usage
 
 ```csharp
