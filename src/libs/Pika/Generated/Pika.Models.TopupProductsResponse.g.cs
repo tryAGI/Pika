@@ -40,5 +40,6 @@ namespace Pika
         public TopupProductsResponse()
         {
         }
+
     }
 }
