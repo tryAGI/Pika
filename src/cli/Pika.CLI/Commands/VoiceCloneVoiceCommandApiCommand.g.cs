@@ -105,7 +105,7 @@ for avatar speech synthesis in meeting sessions.
                         var name = parseResult.GetRequiredValue(NameOption);
                         var audio = parseResult.GetRequiredValue(Audio);
                         var audioname = parseResult.GetRequiredValue(Audioname);
-                        var noiseReduction = CliRuntime.WasSpecified(parseResult, NoiseReduction) ? parseResult.GetValue(NoiseReduction) : __requestBase is not null ? __requestBase.NoiseReduction : default;
+                        var noiseReduction = CliRuntime.WasSpecified(parseResult, NoiseReduction) ? parseResult.GetValue(NoiseReduction) : (__requestBase is { } __NoiseReductionBaseValue ? __NoiseReductionBaseValue.NoiseReduction : default);
                 using var client = await CliRuntime.CreateClientAsync(parseResult, cancellationToken).ConfigureAwait(false);
 
 

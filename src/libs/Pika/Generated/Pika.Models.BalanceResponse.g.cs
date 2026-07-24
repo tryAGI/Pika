@@ -54,5 +54,6 @@ namespace Pika
         public BalanceResponse()
         {
         }
+
     }
 }
