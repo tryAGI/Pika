@@ -4,7 +4,7 @@
 namespace Pika
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class TopupRequest
     {
@@ -42,5 +42,6 @@ namespace Pika
         public TopupRequest()
         {
         }
+
     }
 }

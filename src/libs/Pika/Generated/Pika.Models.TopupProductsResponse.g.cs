@@ -4,12 +4,12 @@
 namespace Pika
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class TopupProductsResponse
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("products")]
         [global::System.Text.Json.Serialization.JsonRequired]
@@ -40,5 +40,6 @@ namespace Pika
         public TopupProductsResponse()
         {
         }
+
     }
 }

@@ -4,7 +4,7 @@
 namespace Pika
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class GenerateAvatarResponse
     {
@@ -53,5 +53,6 @@ namespace Pika
         public GenerateAvatarResponse()
         {
         }
+
     }
 }

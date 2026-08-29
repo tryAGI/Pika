@@ -4,7 +4,7 @@
 namespace Pika
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class BalanceResponse
     {
@@ -54,5 +54,6 @@ namespace Pika
         public BalanceResponse()
         {
         }
+
     }
 }

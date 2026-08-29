@@ -143,8 +143,8 @@ and the meeting URL to join.
                         var meetUrl = parseResult.GetRequiredValue(MeetUrl);
                         var botName = parseResult.GetRequiredValue(BotName);
                         var platform = parseResult.GetRequiredValue(Platform);
-                        var meetingPassword = CliRuntime.WasSpecified(parseResult, MeetingPassword) ? parseResult.GetValue(MeetingPassword) : __requestBase is not null ? __requestBase.MeetingPassword : default;
-                        var systemPrompt = CliRuntime.WasSpecified(parseResult, SystemPrompt) ? parseResult.GetValue(SystemPrompt) : __requestBase is not null ? __requestBase.SystemPrompt : default;
+                        var meetingPassword = CliRuntime.WasSpecified(parseResult, MeetingPassword) ? parseResult.GetValue(MeetingPassword) : (__requestBase is { } __MeetingPasswordBaseValue ? __MeetingPasswordBaseValue.MeetingPassword : default);
+                        var systemPrompt = CliRuntime.WasSpecified(parseResult, SystemPrompt) ? parseResult.GetValue(SystemPrompt) : (__requestBase is { } __SystemPromptBaseValue ? __SystemPromptBaseValue.SystemPrompt : default);
                 using var client = await CliRuntime.CreateClientAsync(parseResult, cancellationToken).ConfigureAwait(false);
 
 

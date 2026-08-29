@@ -9,11 +9,11 @@ namespace Pika
     public enum MeetingPlatform
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         GoogleMeet,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Zoom,
     }
