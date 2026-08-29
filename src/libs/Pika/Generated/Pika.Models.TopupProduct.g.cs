@@ -4,7 +4,7 @@
 namespace Pika
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class TopupProduct
     {
@@ -78,5 +78,6 @@ namespace Pika
         public TopupProduct()
         {
         }
+
     }
 }

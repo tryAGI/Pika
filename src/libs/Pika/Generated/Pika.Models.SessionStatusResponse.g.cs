@@ -4,7 +4,7 @@
 namespace Pika
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class SessionStatusResponse
     {
@@ -102,5 +102,6 @@ namespace Pika
         public SessionStatusResponse()
         {
         }
+
     }
 }

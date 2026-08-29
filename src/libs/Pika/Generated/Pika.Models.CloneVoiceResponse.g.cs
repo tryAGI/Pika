@@ -4,7 +4,7 @@
 namespace Pika
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class CloneVoiceResponse
     {
@@ -88,5 +88,6 @@ namespace Pika
         public CloneVoiceResponse()
         {
         }
+
     }
 }

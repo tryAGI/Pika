@@ -20,7 +20,7 @@ namespace Pika.JsonConverters
                     {
                         return global::Pika.SessionStatusExtensions.ToEnum(stringValue);
                     }
-                    
+
                     break;
                 }
                 case global::System.Text.Json.JsonTokenType.Number:
