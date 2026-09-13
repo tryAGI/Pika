@@ -37,7 +37,7 @@ namespace Pika
 
         internal global::Pika.AutoSDKServerConfiguration AutoSDKServerConfiguration { get; set; } = new global::Pika.AutoSDKServerConfiguration();
 
-        internal global::System.Lazy<global::System.Text.Json.Serialization.JsonSerializerContext> JsonSerializerContextProvider { get; set; } = new(() => global::Pika.SourceGenerationContext.Default);
+        internal global::System.Lazy<global::System.Text.Json.Serialization.JsonSerializerContext> JsonSerializerContextProvider { get; set; } = new(() => global::Pika.VoiceSourceGenerationContext.Default);
 
         /// <summary>
         ///
