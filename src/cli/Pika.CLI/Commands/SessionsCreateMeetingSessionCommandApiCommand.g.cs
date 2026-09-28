@@ -97,6 +97,8 @@ internal static partial class SessionsCreateMeetingSessionCommandApiCommand
                     static partial void CustomizeResponseFormatHints(Dictionary<string, CliFormatHint> hints);
 
 
+    static partial void CustomizeCommand(ref Command command);
+
     public static Command Create()
     {
         var command = new Command(@"create-meeting-session", @"Create a meeting session with avatar
@@ -167,6 +169,7 @@ and the meeting URL to join.
                                     FormatResponse,
                                     cancellationToken).ConfigureAwait(false);
             }, cancellationToken).ConfigureAwait(false));
+        CustomizeCommand(ref command);
         return command;
     }
 }

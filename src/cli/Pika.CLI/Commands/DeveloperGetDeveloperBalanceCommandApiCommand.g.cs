@@ -29,6 +29,8 @@ internal static partial class DeveloperGetDeveloperBalanceCommandApiCommand
                     static partial void CustomizeResponseFormatHints(Dictionary<string, CliFormatHint> hints);
 
 
+    static partial void CustomizeCommand(ref Command command);
+
     public static Command Create()
     {
         var command = new Command(@"get-developer-balance", @"Get developer account balance
@@ -55,6 +57,7 @@ Returns the current credit balance and currency for the authenticated developer 
                                     FormatResponse,
                                     cancellationToken).ConfigureAwait(false);
             }, cancellationToken).ConfigureAwait(false));
+        CustomizeCommand(ref command);
         return command;
     }
 }
