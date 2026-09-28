@@ -4,8 +4,10 @@ using System.CommandLine;
 
 namespace Pika.CLI.Commands;
 
-internal static class ApiCommand
+internal static partial class ApiCommand
 {
+    static partial void CustomizeCommand(ref Command command);
+
     public static Command Create()
     {
         var command = new Command("api", "Generated endpoint commands.");
@@ -14,6 +16,7 @@ internal static class ApiCommand
                          command.Subcommands.Add(DeveloperApiGroupCommand.Create());
                          command.Subcommands.Add(SessionsApiGroupCommand.Create());
                          command.Subcommands.Add(VoiceApiGroupCommand.Create());
+        CustomizeCommand(ref command);
         return command;
     }
 }

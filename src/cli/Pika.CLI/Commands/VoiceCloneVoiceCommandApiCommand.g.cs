@@ -67,6 +67,8 @@ internal static partial class VoiceCloneVoiceCommandApiCommand
                     static partial void CustomizeResponseFormatHints(Dictionary<string, CliFormatHint> hints);
 
 
+    static partial void CustomizeCommand(ref Command command);
+
     public static Command Create()
     {
         var command = new Command(@"clone-voice", @"Clone a voice from audio
@@ -124,6 +126,7 @@ for avatar speech synthesis in meeting sessions.
                                     FormatResponse,
                                     cancellationToken).ConfigureAwait(false);
             }, cancellationToken).ConfigureAwait(false));
+        CustomizeCommand(ref command);
         return command;
     }
 }

@@ -29,6 +29,8 @@ internal static partial class DeveloperGetTopupProductsCommandApiCommand
                     static partial void CustomizeResponseFormatHints(Dictionary<string, CliFormatHint> hints);
 
 
+    static partial void CustomizeCommand(ref Command command);
+
     public static Command Create()
     {
         var command = new Command(@"get-topup-products", @"List available top-up products
@@ -63,6 +65,7 @@ Returns a list of credit top-up products available for purchase.");
                                     cancellationToken).ConfigureAwait(false);
                                 }
             }, cancellationToken).ConfigureAwait(false));
+        CustomizeCommand(ref command);
         return command;
     }
 }

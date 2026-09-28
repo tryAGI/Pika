@@ -33,6 +33,8 @@ internal static partial class SessionsDeleteSessionCommandApiCommand
                     static partial void CustomizeResponseFormatHints(Dictionary<string, CliFormatHint> hints);
 
 
+    static partial void CustomizeCommand(ref Command command);
+
     public static Command Create()
     {
         var command = new Command(@"delete-session", @"End a meeting session
@@ -59,6 +61,7 @@ Terminates an active meeting session, causing the avatar bot to leave the call."
                                     FormatResponse,
                                     cancellationToken).ConfigureAwait(false);
             }, cancellationToken).ConfigureAwait(false));
+        CustomizeCommand(ref command);
         return command;
     }
 }

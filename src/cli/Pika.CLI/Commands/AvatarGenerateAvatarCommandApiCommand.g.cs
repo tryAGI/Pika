@@ -55,6 +55,8 @@ internal static partial class AvatarGenerateAvatarCommandApiCommand
                     static partial void CustomizeResponseFormatHints(Dictionary<string, CliFormatHint> hints);
 
 
+    static partial void CustomizeCommand(ref Command command);
+
     public static Command Create()
     {
         var command = new Command(@"generate-avatar", @"Generate an avatar image
@@ -106,6 +108,7 @@ The generated image can be used as the avatar appearance in meeting sessions.
                                     FormatResponse,
                                     cancellationToken).ConfigureAwait(false);
             }, cancellationToken).ConfigureAwait(false));
+        CustomizeCommand(ref command);
         return command;
     }
 }
