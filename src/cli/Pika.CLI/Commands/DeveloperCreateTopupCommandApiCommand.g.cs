@@ -36,9 +36,9 @@ internal static partial class DeveloperCreateTopupCommandApiCommand
 
     static partial void CustomizeCommand(ref Command command);
 
-    public static Command Create()
+    public static Command Create(string? commandName = null)
     {
-        var command = new Command(@"create-topup", @"Create a top-up checkout session
+        var command = new Command(commandName ?? @"create-topup", @"Create a top-up checkout session
 Initiates a credit purchase by creating a checkout session for the specified product.");
                         command.Options.Add(ProductId);
 

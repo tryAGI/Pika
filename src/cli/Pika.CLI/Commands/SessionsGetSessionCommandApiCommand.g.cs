@@ -35,9 +35,9 @@ internal static partial class SessionsGetSessionCommandApiCommand
 
     static partial void CustomizeCommand(ref Command command);
 
-    public static Command Create()
+    public static Command Create(string? commandName = null)
     {
-        var command = new Command(@"get-session", @"Get meeting session status
+        var command = new Command(commandName ?? @"get-session", @"Get meeting session status
 Returns the current status and connection details for a meeting session.");
                         command.Arguments.Add(SessionId);
 

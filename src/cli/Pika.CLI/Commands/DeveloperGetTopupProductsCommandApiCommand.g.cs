@@ -31,9 +31,9 @@ internal static partial class DeveloperGetTopupProductsCommandApiCommand
 
     static partial void CustomizeCommand(ref Command command);
 
-    public static Command Create()
+    public static Command Create(string? commandName = null)
     {
-        var command = new Command(@"get-topup-products", @"List available top-up products
+        var command = new Command(commandName ?? @"get-topup-products", @"List available top-up products
 Returns a list of credit top-up products available for purchase.");
 
 

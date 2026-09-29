@@ -99,9 +99,9 @@ internal static partial class SessionsCreateMeetingSessionCommandApiCommand
 
     static partial void CustomizeCommand(ref Command command);
 
-    public static Command Create()
+    public static Command Create(string? commandName = null)
     {
-        var command = new Command(@"create-meeting-session", @"Create a meeting session with avatar
+        var command = new Command(commandName ?? @"create-meeting-session", @"Create a meeting session with avatar
 Joins a Google Meet or Zoom call with an AI-powered avatar.
 Requires a reference image for the avatar appearance, a voice ID for speech synthesis,
 and the meeting URL to join.

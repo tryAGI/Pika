@@ -69,9 +69,9 @@ internal static partial class VoiceCloneVoiceCommandApiCommand
 
     static partial void CustomizeCommand(ref Command command);
 
-    public static Command Create()
+    public static Command Create(string? commandName = null)
     {
-        var command = new Command(@"clone-voice", @"Clone a voice from audio
+        var command = new Command(commandName ?? @"clone-voice", @"Clone a voice from audio
 Creates a cloned voice from an audio sample. The cloned voice can be used
 for avatar speech synthesis in meeting sessions.
 ");

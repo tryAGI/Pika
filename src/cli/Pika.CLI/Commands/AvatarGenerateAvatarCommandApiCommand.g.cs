@@ -57,9 +57,9 @@ internal static partial class AvatarGenerateAvatarCommandApiCommand
 
     static partial void CustomizeCommand(ref Command command);
 
-    public static Command Create()
+    public static Command Create(string? commandName = null)
     {
-        var command = new Command(@"generate-avatar", @"Generate an avatar image
+        var command = new Command(commandName ?? @"generate-avatar", @"Generate an avatar image
 Generates an AI avatar image from a text prompt using a specified model.
 The generated image can be used as the avatar appearance in meeting sessions.
 ");

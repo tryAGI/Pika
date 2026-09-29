@@ -31,9 +31,9 @@ internal static partial class DeveloperGetDeveloperBalanceCommandApiCommand
 
     static partial void CustomizeCommand(ref Command command);
 
-    public static Command Create()
+    public static Command Create(string? commandName = null)
     {
-        var command = new Command(@"get-developer-balance", @"Get developer account balance
+        var command = new Command(commandName ?? @"get-developer-balance", @"Get developer account balance
 Returns the current credit balance and currency for the authenticated developer account.");
 
 
