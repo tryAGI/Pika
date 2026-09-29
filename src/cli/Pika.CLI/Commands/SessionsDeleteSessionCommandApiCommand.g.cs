@@ -35,9 +35,9 @@ internal static partial class SessionsDeleteSessionCommandApiCommand
 
     static partial void CustomizeCommand(ref Command command);
 
-    public static Command Create()
+    public static Command Create(string? commandName = null)
     {
-        var command = new Command(@"delete-session", @"End a meeting session
+        var command = new Command(commandName ?? @"delete-session", @"End a meeting session
 Terminates an active meeting session, causing the avatar bot to leave the call.");
                         command.Arguments.Add(SessionId);
 
