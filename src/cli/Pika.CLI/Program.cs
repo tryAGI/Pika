@@ -15,5 +15,6 @@ rootCommand.Subcommands.Add(AvatarApiGroupCommand.Create());
 rootCommand.Subcommands.Add(DeveloperApiGroupCommand.Create());
 rootCommand.Subcommands.Add(SessionsApiGroupCommand.Create());
 rootCommand.Subcommands.Add(VoiceApiGroupCommand.Create());
+rootCommand.Subcommands.Add(CliCompletion.CreateCommand(rootCommand, @"pika"));
 
 return await rootCommand.Parse(args).InvokeAsync().ConfigureAwait(false);
